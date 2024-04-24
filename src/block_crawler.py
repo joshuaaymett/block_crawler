@@ -64,7 +64,9 @@ def block_crawler(endpoint: str, db_path: str, block_range: str):
     cur.execute(f"CREATE TABLE IF NOT EXISTS `transaction` ({TRANSACTION_SCHEMA})")
     cur.execute(f"CREATE TABLE IF NOT EXISTS block ({BLOCK_SCHEMA})")
 
+    # Save responses in database
     for response in responses:
+        # Save blocks to block table
         results_json = response.json()["result"]
         block_hash = get_nullable_val_from_dict(results_json, "hash")
         number = get_nullable_val_from_dict(results_json, "number")
@@ -73,6 +75,7 @@ def block_crawler(endpoint: str, db_path: str, block_range: str):
         cur.execute(
             f"INSERT INTO block (hash, number, timestamp) VALUES ('{block_hash}', '{number}', '{timestamp}')"
         )
+        # Save transactions to transaction table
         for transaction in transactions:
             t_hash = transaction["hash"]
             t_block_hash = get_nullable_val_from_dict(transaction, "blockHash")
@@ -91,23 +94,3 @@ def block_crawler(endpoint: str, db_path: str, block_range: str):
 
 if __name__ == "__main__":
     block_crawler()
-
-
-# TODO comment and document code thoroughly
-# TODO update requirements.txt
-# TODO blockchain type should be designed in a way where adding new ones are flexible
-# TODO add a couple unit tests? or at least document
-# TODO document that input validation could be added, multithreading could be added
-# TODO document inclusive range
-# TODO address performance concerns
-# TODO document design decision for schemas and databases (ability to add more)
-# TODO document exception handling, rate limits, etc
-# TODO ignore pycache and delete
-# TODO delete functionality??
-# TODO document how I would have handled if inserting into the database failed (e.g. inserting into block succeeded but transactions failed). Google best way to handle this first
-# TODO document schema adjustments like timestamp (should it be a text?)
-# TODO what about updating table? Can be null if pending for block number
-# TODO add assignment pdf to repo
-# TODO document block number and hash can be null but this is limited with the current design
-# TODO documenet improvements: batching insertions
-# TODO analyze to make sure there's no None values and nulls are correct
