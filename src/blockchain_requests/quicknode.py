@@ -11,6 +11,10 @@ class QuickNodeRequest:
 
 
 class QuickNodeEtheriumRequest(QuickNodeRequest):
+    """
+    Class for storing QuickNode etherium request headers, payload, etc.
+    """
+
     def __init__(
         self, call_name: str, url: str, req_id: str = None, parameters: list = []
     ) -> None:
@@ -31,4 +35,5 @@ class QuickNodeEtheriumRequest(QuickNodeRequest):
             "url": self.url,
             "headers": self.headers,
             "data": json.dumps(self.payload),
+            "timeout": 5,
         }
