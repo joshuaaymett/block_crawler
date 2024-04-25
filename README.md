@@ -13,7 +13,7 @@ e.g.
 python block_crawler.py --endpoint <quicknode_endpoint> --db-path foo.db --block-range 19727985-19727990
 
 ## Design
-This project is intended as a sample and lacks input validation. It also has minimal exception handling which would need to be addded before using in a production environment.
+This project is intended as a sample and lacks input validation. It also has minimal exception handling which would need to be addded before using in a production environment. Duplicate blocks/transactions are allowed in tables as each table uses a surrogate key, "id", as the primary key.
 
 ### Easy Expansion
 The current structure src/blockchain_requests allows for easy addition of new APIs/blockchains. The structure may require additional folders (e.g. src/blockchain_requests/quicknode/etherium.py, etc.) should many additional APIs/blockchains be added. Schemas are structured similarly.

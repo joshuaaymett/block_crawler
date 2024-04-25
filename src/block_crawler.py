@@ -21,6 +21,11 @@ def get_nullable_val_from_dict(dictionary: dict, key: str) -> str:
     return val
 
 
+def get_block_range(block_range: str) -> tuple:
+    split_br: str = str(block_range).split("-")
+    return (int(split_br[0]), int(split_br[1]))
+
+
 @click.command()
 @click.option(
     "--endpoint",
@@ -39,9 +44,7 @@ def block_crawler(endpoint: str, db_path: str, block_range: str):
     """
     Main script
     """
-    split_br: str = str(block_range).split("-")
-    br_start: int = int(split_br[0])
-    br_end: int = int(split_br[1])
+    br_start, br_end = get_block_range(block_range)
 
     responses: list = []
     for block_num in range(br_start, br_end + 1):
@@ -70,10 +73,10 @@ def block_crawler(endpoint: str, db_path: str, block_range: str):
         results_json = response.json()["result"]
         block_hash = get_nullable_val_from_dict(results_json, "hash")
         number = get_nullable_val_from_dict(results_json, "number")
-        timestamp = results_json["timestamp"]
+        timestamp = int(results_json["timestamp"], 16)
         transactions = results_json["transactions"]
         cur.execute(
-            f"INSERT INTO block (hash, number, timestamp) VALUES ('{block_hash}', '{number}', '{timestamp}')"
+            f"INSERT INTO block (hash, number, timestamp) VALUES ('{block_hash}', '{number}', datetime({timestamp}, 'unixepoch'))"
         )
         # Save transactions to transaction table
         for transaction in transactions:
