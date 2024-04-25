@@ -4,6 +4,7 @@ Script for getting blocks in a range and persisting to a sqlite database
 
 from time import sleep
 import sqlite3
+import re
 import click
 import requests
 from blockchain_requests import QuickNodeEtheriumRequest
@@ -22,8 +23,20 @@ def get_nullable_val_from_dict(dictionary: dict, key: str) -> str:
 
 
 def get_block_range(block_range: str) -> tuple:
+    """
+    Returns tuple (start, end) for block range string and performs input validation
+    """
+    if not re.match(r"^\d+-\d+$", block_range):
+        raise ValueError(
+            f"Invalid block range {block_range}. Input must be of format start-end (e.g. 10-14)"
+        )
     split_br: str = str(block_range).split("-")
-    return (int(split_br[0]), int(split_br[1]))
+    start, end = int(split_br[0]), int(split_br[1])
+    if not end >= start:
+        raise ValueError(
+            f"Invalid block range {start}-{end}, start of block range must be less than or equal to end"
+        )
+    return (start, end)
 
 
 @click.command()
