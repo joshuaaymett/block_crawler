@@ -8,19 +8,19 @@ run `pip install -r requirements.txt` in the root directory of the repo
 
 ## Usage
 The `block_crawler` script takes three arguments:
---endpoint: A QuickNode endpoint (see technical challenge PDF for instructions on how to set up)
+--endpoint: A QuickNode endpoint (see [technical challenge PDF](./relayer-technical-challenge.pdf) for instructions on how to set up)
 --db-path: Path to SQLite database
 --block-range: Inclusive block range to query and save to DB (e.g. 10-13 includes blocks 10, 11, 12, and 13)
 
 e.g. 
-python block_crawler.py --endpoint <quicknode_endpoint> --db-path foo.db --block-range 19727985-19727990
+`python block_crawler.py --endpoint <quicknode_endpoint> --db-path foo.db --block-range 19727985-19727990`
 
 The `find_largest_volume` script takes a single argument:
 --db-path: Path to SQLite database
 It returns information about the largest block by volume between dates 2024-01-01 00:00:00 and 2024-01-01 00:30:00. Sample output for the date range in the [specification file](./relayer-technical-challenge.pdf) can be found in [output.txt.](./output.txt)
 
 e.g. 
-python find_largest_volume.py --db-path foo.db
+`python find_largest_volume.py --db-path foo.db`
 
 ## Design
 This project is intended as a POC. Duplicate blocks/transactions are allowed in tables as each table uses a surrogate key, "id", as the primary key.
