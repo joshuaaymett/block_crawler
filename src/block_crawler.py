@@ -74,11 +74,14 @@ def block_crawler(endpoint: str, db_path: str, block_range: str):
             responses.append(requests.post(**req.get_request_params()))
 
     con = sqlite3.connect(db_path)
+    print(f"Established connection with database {db_path}")
     cur = con.cursor()
 
     # Create transaction table and then create block table with transaction as a foreign key
     cur.execute(f"CREATE TABLE IF NOT EXISTS `transaction` ({TRANSACTION_SCHEMA})")
+    print("Table 'transaction' has been created")
     cur.execute(f"CREATE TABLE IF NOT EXISTS block ({BLOCK_SCHEMA})")
+    print("Table 'block' has been created")
 
     # Save responses in database
     for response in responses:
@@ -103,9 +106,14 @@ def block_crawler(endpoint: str, db_path: str, block_range: str):
                 f"INSERT INTO `transaction` (hash, blockHash, blockNumber, `from`, `to`, value) \
                 VALUES ('{t_hash}', '{t_block_hash}', '{t_block_number}', '{t_from}', '{t_to}', '{t_value}')"
             )
+        print(
+            f"Inserted data for block {block_hash} into tables 'transaction' and 'block'"
+        )
 
     con.commit()
+    print("Changes successfully committed")
     con.close()
+    print("Connection successfully closed")
 
 
 if __name__ == "__main__":

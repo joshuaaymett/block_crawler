@@ -33,3 +33,5 @@ SQLite commit is intentionally placed at the end of the script to ensure ACID co
 - Batch database insertions
 - Add multithreading for endpoint requests (account for endpoint request limits, add "smart" functionality for dynamically adjusting)
 - Unit testing
+- Enhance logging to use python logging library. Current implementation uses print
+- Verify that tables with correct schemas exist and throw an error of there's a schema mismatch
