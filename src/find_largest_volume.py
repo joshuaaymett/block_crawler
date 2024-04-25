@@ -6,7 +6,7 @@ block with the largest volume between dates (inclusive) 2024-01-01 00:00:00 and 
 import sqlite3
 import click
 
-QUERY_START_DATE: str = "2024-01-01 00:00:00"
+QUERY_START_DATE: str = "2014-01-01 00:00:00"
 QUERY_END_DATE: str = "2024-01-01 00:30:00"
 
 
@@ -38,10 +38,11 @@ def find_largest_volume(db_path: str):
     query = f"""
         SELECT block.number, hexsum("transaction"."value") AS transum from "transaction" JOIN block
             WHERE block.hash = "transaction"."blockHash" AND block.timestamp BETWEEN '{QUERY_START_DATE}' AND '{QUERY_END_DATE}'
-            GROUP BY(block.hash) ORDER BY transum DESC limit 1
+            GROUP BY(block.hash)
     """
     cur.execute(query)
-    result = cur.fetchall()[0]
+    result = sorted(cur.fetchall(), key=lambda x: int(x[1], 16), reverse=True)[0]
+
     print(
         f"Block {int(result[0], 16)} is the largest block in date range {QUERY_START_DATE} through {QUERY_END_DATE}"
         + f" with volume {int(result[1], 16)} Wei"
