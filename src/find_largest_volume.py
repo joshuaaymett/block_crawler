@@ -6,7 +6,7 @@ block with the largest volume between dates (inclusive) 2024-01-01 00:00:00 and 
 import sqlite3
 import click
 
-QUERY_START_DATE: str = "2014-01-01 00:00:00"
+QUERY_START_DATE: str = "2024-01-01 00:00:00"
 QUERY_END_DATE: str = "2024-01-01 00:30:00"
 
 
